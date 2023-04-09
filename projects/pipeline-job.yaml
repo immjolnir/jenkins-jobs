@@ -1,0 +1,26 @@
+# Pipeline as code
+- job:
+    name: pipeline-job
+    display-name: 'Pipeline Job'
+    project-type: pipeline
+    description: An example for pipeline
+    disabled: false
+    concurrent: false
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/immjolnir/jenkins-jobs.git
+            credentials-id: "github-login-account"
+
+    properties:
+      - inject:
+            properties-content: |
+              DATA_PATH=/work/data/
+    logrotate:
+        daysToKeep: 14
+    wrappers:
+      - timeout:
+          # If the job takes longer than this, something is really wrong...
+          timeout: 300
+          timeout-var: 'BUILD_TIMEOUT'
+          fail: true

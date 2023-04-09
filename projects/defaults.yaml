@@ -1,0 +1,14 @@
+# https://jenkins-job-builder.readthedocs.io/en/latest/definition.html#defaults
+# Default config under name global Will be loaded into all job definitions automatically
+#
+# A job will siliently ignore a config field if it is not needed anywhere based on the
+# job's project-type and variable references
+#
+# But it not work
+# Config field below can also be overriden in individual project definition
+- defaults:
+    name: global
+    description: 'Do not edit this job through the web!'
+    head-filter-regex-value: 'main|PR-.*'
+    github_api: 'https://github.com/api/v3'
+

@@ -1,0 +1,53 @@
+# See: https://docs.openstack.org/infra/jenkins-job-builder/
+
+- project:
+    name: "parallel-stages"
+    jobs:
+        - "parallel-stages"
+
+- job:
+    name: "parallel-stages"
+    display-name: 'Parallel Stages'
+    description: 'Do not edit this job through the web!'
+    project-type: pipeline
+    concurrent: true
+    properties:
+      - inject:
+            properties-content: |
+              DATA_PATH=/work/data/
+    logrotate:
+        daysToKeep: 14
+    wrappers:
+      - timeout:
+          # If the job takes longer than this, something is really wrong...
+          timeout: 300
+          timeout-var: 'BUILD_TIMEOUT'
+          fail: true
+    parameters:
+        - string:
+            name: docker_baseline_image
+            description: "Which docker image:tag to use as baseline."
+            default: ""
+        - string:
+            name: docker_target_image
+            description: "Which docker image:tag to use as target"
+            default: ""
+        - string:
+            name: pr_git_sha
+            description: "Optional repo PR git commit/sha to report status back to when replay has finished (or failed)."
+            default: ""
+        - choice:
+            name: agents
+            choices:
+                - on_prem
+                - cloud
+                - hybrid
+                - docker
+            description: "where to run simulation: from corporate machines only (on_prem), from cloud instances only (cloud), or from both with a preference for on_prem (hybrid), from docker label instances only (docker)"
+            default: "on_prem"
+        - bool:
+            name: clear_broken_results
+            default: false
+            description: "Whether to clear the broken results: *.borked found on remote machine."
+    dsl:
+        !include-raw: scripts/parallel-stages.groovy

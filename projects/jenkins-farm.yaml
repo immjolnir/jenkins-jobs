@@ -1,0 +1,37 @@
+# Pipeline as code
+# https://jenkins-job-builder.readthedocs.io/en/latest/project_workflow_multibranch.html#project_multibranch.github_scm
+- project:
+    name: jenkins-farm
+    jobs:
+        - jenkins-farm
+
+- job:
+    name: jenkins-farm
+    description: Do not edit it through the web!
+    display-name: Jenkins Farm
+    project-type: multibranch
+    periodic-folder-trigger: 1d
+    logrotate:
+        daysToKeep: 30
+    scm:
+        - github:
+            api-uri: 'https://github.com/api/v3/'
+            repo-owner: immjolnir
+            repo: jenkins-farm
+            credentials-id: "github-login-account"
+            discover-pr-origin: current
+            discover-pr-forks-strategy: current
+            branch-discovery: all
+            head-filter-regex: 'main|PR-.*'
+            #ssh-checkout:
+            #    credentials: github-ssh
+            # This saves bandwidth for checkouts.
+            shallow-clone: true
+            do-not-fetch-tags: true
+            # When multiple people land several commits in quick succession,
+            # for instance, master -> A -> B -> C, each commit spawns a
+            # job. So the job for A needs to be able to access the commit,
+            # which is why we set the depth to a reasonably low value that
+            # is greater than 1.
+            depth: 10
+            honor-refspec: true

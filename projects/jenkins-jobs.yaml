@@ -1,0 +1,31 @@
+# Pipeline as code
+- project:
+    name: "jenkins-jobs"
+    jobs:
+        - "jenkins-jobs"
+
+- job:
+    name: "jenkins-jobs"
+    description: 'Do not edit it through the web!'
+    display-name: 'Jenkins Jobs'
+    project-type: multibranch
+    periodic-folder-trigger: 1d
+    scm:
+        - github:
+            api-uri: https://github.com/api/v3
+            repo-owner: immjolnir
+            repo: jenkins-jobs
+            credentials-id: "github-login-account"
+            # https://jenkins-job-builder.readthedocs.io/en/latest/project_workflow_multibranch.html#project_multibranch.github_scm
+            # Checkout over SSH. But to checkout over http, they are commentted out.
+            #ssh-checkout:
+            #    credentials: github-ssh
+            depth: 1
+            discover-pr-origin: current
+            discover-pr-forks-strategy: current
+            branch-discovery: all
+            head-filter-regex: 'main|PR-*'
+            # This saves bandwidth for checkouts.
+            shallow-clone: true
+            do-not-fetch-tags: true
+            honor-refspec: true
