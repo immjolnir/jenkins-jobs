@@ -24,6 +24,28 @@ pipeline {
         parallelsAlwaysFailFast()
     }
     stages {
+        stage('Show pullRequest info') {
+            steps {
+                script {
+                    // hudson.remoting.ProxyException: groovy.lang.MissingMethodException: No signature of method: org.jenkinsci.plugins.pipeline.github.PullRequestGroovyObject.listFiles() is applicable for argument types: () values: []
+
+                    // See https://plugins.jenkins.io/github-api/
+                    // https://github.com/jenkinsci/pipeline-github-plugin/blob/master/src/main/java/org/jenkinsci/plugins/pipeline/github/PullRequestGroovyObject.java
+                    // changedfiles: [Jenkinsfile, file1, file2]
+                    changedfiles = pullRequest.getFiles().collect { it.getFilename() }
+                    changedfiles_num = pullRequest.getChangedFiles()
+                    commits_num = pullRequest.getCommitCount()
+                    draft = pullRequest.isDraft()
+
+                    echo "changedfiles_num: ${changedfiles_num}"
+                    echo "changedfiles: ${changedfiles}"
+                    echo "commits_num: ${commits_num}"
+                    echo "draft: ${draft}"
+
+                    // perception_changed = pullRequest.getFiles().any { it.getFilename().startsWith("perception")? true: false }
+                }
+            }
+        }
         stage('Non-Parallel Stage') {
             steps {
                 echo 'This stage will be executed first.'

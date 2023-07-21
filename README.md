@@ -37,6 +37,17 @@ The directory structure of a Shared Library repository is as follows:
 
 # Plugins
 * Blue Ocean
+* [github-api](https://github.com/hub4j/github-api)
+* [GitHub Branch Source Plugin](https://github.com/jenkinsci/github-branch-source-plugin)
+* [Jenkins Job DSL Plugin](https://github.com/jenkinsci/job-dsl-plugin)
+- [pipeline-github-plugin](https://github.com/jenkinsci/pipeline-github-plugin): Pipeline: Github
+  - "pullRequest" is a global variable.
+  - src/main/java/org/jenkinsci/plugins/pipeline/github/PullRequestGlobalVariable.java
+  - src/main/java/org/jenkinsci/plugins/pipeline/github/GitHubPipelineGlobalVariables.java
+
+# Tools
+* [Jenkinsfile Runner (Incubating project)](https://github.com/jenkinsci/jenkinsfile-runner)
+
 
 # [Jenkins Job Builder](https://jenkins-job-builder.readthedocs.io/en/latest/quick-start.html)
 Jenkins Job Builder takes simple descriptions of Jenkins jobs in YAML or JSON format and uses them to configure Jenkins. You can keep your job descriptions in human readable text format in a version control system to make changes and auditing easier. It also has a flexible template system, so creating many similarly configured jobs is easy.
