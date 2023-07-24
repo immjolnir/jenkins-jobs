@@ -43,6 +43,12 @@ pipeline {
                     echo "draft: ${draft}"
 
                     // perception_changed = pullRequest.getFiles().any { it.getFilename().startsWith("perception")? true: false }
+                    def regression_jobs = ""
+                    def label_prefix = "regression_test"
+                    regression_jobs = pullRequest.getLabels()
+                                                .findResults{ it.startsWith(label_prefix) ? it.minus(label_prefix) : null }
+                                                .join(",")
+                    echo "regression test names: ${regression_jobs}"
                 }
             }
         }
